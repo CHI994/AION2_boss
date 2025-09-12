@@ -6,55 +6,61 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 222 20% 11%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 222 15% 15%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 222 15% 15%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 142 85% 45%;
+    --primary-foreground: 222 20% 11%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 240 10% 25%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 240 10% 25%;
+    --muted-foreground: 240 5% 75%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 240 10% 25%;
+    --accent-foreground: 0 0% 95%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 240 10% 30%;
+    --input: 240 10% 20%;
+    --ring: 142 85% 45%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* 天堂2M 群組主題色彩 */
-    --erika1: 0 71% 54%;      /* 艾瑞卡1 - 紅色 */
-    --erika2: 207 90% 54%;    /* 艾瑞卡2 - 藍色 */
-    --erika3: 145 63% 49%;    /* 艾瑞卡3 - 綠色 */
-    --erika4: 37 90% 51%;     /* 艾瑞卡4 - 橙色 */
-    --erika5: 262 52% 47%;    /* 艾瑞卡5 - 紫色 */
-    --erika6: 25 85% 52%;     /* 艾瑞卡6 - 橘色 */
-    --leonard5: 168 76% 36%;  /* 黎歐納5 - 藍綠 */
-    --dragon1: 348 81% 38%;   /* 猛龍一盟 - 深紅 */
-    --dragon2: 259 69% 44%;   /* 猛龍二盟 - 深紫 */
+    /* 天堂2M 群組主題色彩 - 霓虹風格 */
+    --erika1: 0 85% 62%;      /* 艾瑞卡1 - 霓虹紅 */
+    --erika2: 207 100% 65%;   /* 艾瑞卡2 - 霓虹藍 */
+    --erika3: 145 85% 58%;    /* 艾瑞卡3 - 霓虹綠 */
+    --erika4: 35 100% 60%;    /* 艾瑞卡4 - 霓虹橙 */
+    --erika5: 270 85% 65%;    /* 艾瑞卡5 - 霓虹紫 */
+    --erika6: 25 100% 62%;    /* 艾瑞卡6 - 霓虹橘 */
+    --leonard1: 180 85% 55%;  /* 黎歐納1 - 霓虹青 */
+    --leonard2: 195 85% 60%;  /* 黎歐納2 - 天藍 */
+    --leonard3: 210 85% 65%;  /* 黎歐納3 - 藍色 */
+    --leonard4: 225 85% 60%;  /* 黎歐納4 - 藍紫 */
+    --leonard5: 240 85% 65%;  /* 黎歐納5 - 紫藍 */
+    --leonard6: 255 85% 60%;  /* 黎歐納6 - 紫色 */
+    --dragon1: 348 100% 60%;  /* 猛龍一盟 - 深霓虹紅 */
+    --dragon2: 260 85% 65%;   /* 猛龍二盟 - 深霓虹紫 */
 
-    /* 狀態顏色 */
-    --boss-alive: 145 63% 49%;     /* 存活 - 綠色 */
-    --boss-dead: 0 71% 54%;        /* 死亡 - 紅色 */
-    --boss-respawning: 37 90% 51%; /* 重生中 - 橙色 */
+    /* 狀態顏色 - 高對比度配色 */
+    --boss-alive: 142 90% 65%;     /* 存活 - 明亮綠 */
+    --boss-dead: 0 90% 70%;        /* 死亡 - 明亮紅 */
+    --boss-respawning: 35 100% 65%; /* 重生中 - 明亮橙 */
 
-    /* 漸變效果 */
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.8));
-    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
+    /* 漸變效果 - 深色主題漸變 */
+    --gradient-hero: linear-gradient(135deg, hsl(240 10% 3.9%), hsl(240 3.7% 15.9%));
+    --gradient-card: linear-gradient(145deg, hsl(240 3.7% 15.9%), hsl(240 3.7% 20%));
+    --gradient-neon: linear-gradient(45deg, hsl(var(--primary)), hsl(142 85% 45%));
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -66,59 +72,6 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-
-    /* 深色模式群組色彩調整 */
-    --erika1: 0 71% 64%;
-    --erika2: 207 90% 64%;
-    --erika3: 145 63% 59%;
-    --erika4: 37 90% 61%;
-    --erika5: 262 52% 57%;
-    --erika6: 25 85% 62%;
-    --leonard5: 168 76% 46%;
-    --dragon1: 348 81% 48%;
-    --dragon2: 259 69% 54%;
-
-    --boss-alive: 145 63% 59%;
-    --boss-dead: 0 71% 64%;
-    --boss-respawning: 37 90% 61%;
-
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
 }
 
 @layer base {
@@ -131,7 +84,7 @@
   }
 }
 
-/* 自定義動畫 */
+/* 自定義動畫 - 霓虹效果 */
 @layer utilities {
   .animate-pulse-slow {
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -141,17 +94,83 @@
     animation: countdown 1s ease-in-out infinite;
   }
   
+  .animate-neon-pulse {
+    /* 移除霓虹脈衝效果 */
+  }
+  
+  .animate-glow {
+    /* 移除發光效果 */
+  }
+  
   @keyframes countdown {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+    0%, 100% { 
+      transform: scale(1);
+    }
+    50% { 
+      transform: scale(1.05);
+    }
+  }
+  
+  @keyframes neon-pulse {
+    from {
+      text-shadow: 
+        0 0 3px currentColor,
+        0 0 6px currentColor,
+        0 0 9px currentColor;
+    }
+    to {
+      text-shadow: 
+        0 0 1px currentColor,
+        0 0 3px currentColor,
+        0 0 6px currentColor;
+    }
+  }
+  
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 3px hsl(var(--primary) / 0.2);
+    }
+    to {
+      box-shadow: 
+        0 0 6px hsl(var(--primary) / 0.3),
+        0 0 12px hsl(var(--primary) / 0.2);
+    }
   }
   
   .boss-row-hover {
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
   }
   
   .boss-row-hover:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+      0 10px 25px rgba(0, 0, 0, 0.3),
+      0 0 0 1px hsl(var(--primary) / 0.2),
+      inset 0 1px 0 hsl(var(--primary) / 0.1);
+    background: linear-gradient(145deg, 
+      hsl(var(--card)), 
+      hsl(var(--muted) / 0.8)
+    );
+  }
+  
+  .text-boss-alive {
+    color: hsl(var(--boss-alive));
+  }
+  
+  .text-boss-dead {
+    color: hsl(var(--boss-dead));
+  }
+  
+  .text-boss-respawning {
+    color: hsl(var(--boss-respawning));
+  }
+  
+  .card-neon {
+    border: 1px solid hsl(var(--primary) / 0.4);
+    background: linear-gradient(145deg, 
+      hsl(var(--card)), 
+      hsl(var(--muted) / 0.7)
+    );
   }
 }

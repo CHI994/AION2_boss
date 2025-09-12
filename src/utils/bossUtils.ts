@@ -28,21 +28,34 @@ export const calculateBossStatus = (boss: Boss): BossWithStatus => {
   }
 
   const lastKilledTime = new Date(boss.lastKilled);
-  const respawnTime = new Date(lastKilledTime.getTime() + boss.respawnMinutes * 60 * 1000);
-  const timeDiff = respawnTime.getTime() - now.getTime();
+  let respawnTime = new Date(lastKilledTime.getTime() + boss.respawnMinutes * 60 * 1000);
+  let timeDiff = respawnTime.getTime() - now.getTime();
 
+  // 如果重生時間已過，BOSS應該是存活狀態，但仍顯示下一個理論重生時間
   if (timeDiff <= 0) {
+    // 計算下一個理論重生時間（如果再次被殺的話）
+    const timePassed = now.getTime() - respawnTime.getTime();
+    const cyclesPassed = Math.floor(timePassed / (boss.respawnMinutes * 60 * 1000)) + 1;
+    const nextTheoreticalRespawn = new Date(lastKilledTime.getTime() + (boss.respawnMinutes * 60 * 1000) * (cyclesPassed + 1));
+    
     return {
       ...boss,
       status: BossStatus.ALIVE,
+      nextRespawnTime: nextTheoreticalRespawn.toISOString(),
+      formattedRespawnTime: `可擊殺 (理論下次: ${formatTime(nextTheoreticalRespawn)})`,
     };
   }
+
+  const timeUntilRespawnSeconds = Math.floor(timeDiff / 1000);
+  const isWarning = timeUntilRespawnSeconds <= 300 && timeUntilRespawnSeconds > 0; // 5分鐘 = 300秒
 
   return {
     ...boss,
     status: BossStatus.RESPAWNING,
-    timeUntilRespawn: Math.floor(timeDiff / 1000),
+    timeUntilRespawn: timeUntilRespawnSeconds,
     formattedRespawnTime: formatTime(respawnTime),
+    nextRespawnTime: respawnTime.toISOString(),
+    isWarning,
   };
 };
 

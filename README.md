@@ -1,73 +1,124 @@
-# Welcome to your Lovable project
+# 天堂2M Boss追蹤器
 
-## Project info
+一個現代化的天堂2M Boss重生時間追蹤應用，支援雲端同步功能。
 
-**URL**: https://lovable.dev/projects/7710947a-14d4-43a1-bec8-3a77b3f76a0b
+## 功能特色
 
-## How can I edit this code?
+- ✨ 即時Boss重生倒計時
+- 🔄 自動週期計算和時間調整  
+- 🚨 5分鐘重生提醒通知
+- ☁️ 雲端資料同步 (跨設備存取)
+- 💾 本地儲存備援
+- 🎨 現代化深色主題界面
+- 📱 響應式設計 (支援桌面和移動設備)
+- 🌐 多伺服器支援 (黎歐納1-6)
 
-There are several ways of editing your application.
+## 快速開始
 
-**Use Lovable**
+### 本地開發
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7710947a-14d4-43a1-bec8-3a77b3f76a0b) and start prompting.
+1. 安裝依賴
+```bash
+npm install
+```
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+2. 啟動開發伺服器
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+3. 在瀏覽器中開啟 http://localhost:8080
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 雲端同步設定 (可選)
 
-**Use GitHub Codespaces**
+要啟用跨設備同步功能：
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. 前往 [Supabase](https://supabase.com) 建立專案
+2. 複製專案的 URL 和 API Key
+3. 複製 `.env` 檔案範本：
+```bash
+cp .env .env.local
+```
+4. 編輯 `.env.local` 檔案，填入您的 Supabase 配置：
+```env
+VITE_SUPABASE_URL=您的專案URL
+VITE_SUPABASE_ANON_KEY=您的API密鑰
+```
 
-## What technologies are used for this project?
+5. 在 Supabase SQL 編輯器中執行以下 SQL 建立資料表：
+```sql
+CREATE TABLE boss_tracker_data (
+  id SERIAL PRIMARY KEY,
+  group_name VARCHAR(50) NOT NULL,
+  boss_name VARCHAR(100) NOT NULL,
+  respawn_minutes INTEGER NOT NULL,
+  last_killed TIMESTAMP WITH TIME ZONE,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-This project is built with:
+-- 建立索引以提升查詢效能
+CREATE INDEX idx_boss_tracker_group_name ON boss_tracker_data(group_name);
+CREATE INDEX idx_boss_tracker_boss_name ON boss_tracker_data(boss_name);
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 使用說明
 
-## How can I deploy this project?
+### 基本操作
 
-Simply open [Lovable](https://lovable.dev/projects/7710947a-14d4-43a1-bec8-3a77b3f76a0b) and click on Share -> Publish.
+1. **選擇伺服器群組**：從首頁選擇您的伺服器
+2. **記錄擊殺時間**：點擊Boss列表中的 ⏰ 圖示
+3. **手動輸入時間**：支援多種格式：
+   - `hhmmss` (例：143045)
+   - `mmddhhmmss` (例：1225143045) 
+   - `HH:MM` (例：14:30)
+   - `MM/DD HH:MM` (例：12/25 14:30)
 
-## Can I connect a custom domain to my Lovable project?
+### 智能時間處理
 
-Yes, you can!
+系統會自動調整輸入的時間到最合理的重生週期：
+- 未來時間：自動向前推算到過去
+- 過於久遠的時間：自動向前推算到近期週期
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### 同步狀態指示
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+右上角顯示目前的同步狀態：
+- 🌩️ 同步中... (黃色)
+- ☁️ 雲端 (綠色) - 雲端同步已啟用
+- ☁️ 本地 (灰色) - 僅本地儲存
+
+## 技術架構
+
+- **前端框架**：React + TypeScript
+- **建構工具**：Vite
+- **UI 組件**：shadcn/ui + Radix UI
+- **樣式系統**：Tailwind CSS
+- **資料庫**：Supabase (PostgreSQL)
+- **本地儲存**：LocalStorage (備援)
+
+## 部署
+
+### 使用 Lovable 部署
+
+1. 開啟 [Lovable 專案](https://lovable.dev/projects/7710947a-14d4-43a1-bec8-3a77b3f76a0b)
+2. 點擊 Share -> Publish
+
+### 本地建構
+
+```bash
+# 建構生產版本
+npm run build
+
+# 預覽建構結果
+npm run preview
+```
+
+生產檔案將在 `dist/` 目錄中生成。
+
+## 本專案資訊
+
+**Lovable URL**: https://lovable.dev/projects/7710947a-14d4-43a1-bec8-3a77b3f76a0b
+
+## 授權
+
+此專案採用 MIT 授權條款。
