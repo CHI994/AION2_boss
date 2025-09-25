@@ -146,12 +146,12 @@ export class BossDataService {
 
       // Insert new records
       const records: Omit<BossRecord, 'id' | 'created_at'>[] = []
-      for (const [bossName, bossData] of Object.entries(bossData)) {
+      for (const [bossName, bossInfo] of Object.entries(bossData)) {
         records.push({
           group_name: this.groupName,
           boss_name: bossName,
-          respawn_minutes: bossData.respawnMinutes,
-          last_killed: bossData.lastKilled,
+          respawn_minutes: bossInfo.respawnMinutes,
+          last_killed: bossInfo.lastKilled,
           updated_at: new Date().toISOString()
         })
       }

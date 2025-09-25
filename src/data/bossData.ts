@@ -57,4 +57,5 @@ export const defaultBossData: BossData = {
   "塔那透斯": { name: "塔那透斯", respawnMinutes: 1440, lastKilled: null },
   "鳳凰": { name: "鳳凰", respawnMinutes: 1440, lastKilled: null },
   "摩德烏斯": { name: "摩德烏斯", respawnMinutes: 1440, lastKilled: null },
+  "薩拉克斯": { name: "薩拉克斯", respawnMinutes: 1440, lastKilled: null },
 };
