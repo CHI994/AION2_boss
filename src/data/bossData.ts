@@ -32,9 +32,7 @@ export const defaultBossData: BossData = {
   "克拉奇": { name: "克拉奇", respawnMinutes: 480, lastKilled: null },
   "弗林特": { name: "弗林特", respawnMinutes: 480, lastKilled: null },
   "蘭多勒": { name: "蘭多勒", respawnMinutes: 480, lastKilled: null },
-  "費德": { name: "費德", respawnMinutes: 540, lastKilled: null },
   "寇倫": { name: "寇倫", respawnMinutes: 600, lastKilled: null },
-  "瑪杜克": { name: "瑪杜克", respawnMinutes: 600, lastKilled: null },
   "薩班": { name: "薩班", respawnMinutes: 720, lastKilled: null },
   "核心基座": { name: "核心基座", respawnMinutes: 720, lastKilled: null },
   "猛龍獸": { name: "猛龍獸", respawnMinutes: 720, lastKilled: null },
@@ -58,4 +56,8 @@ export const defaultBossData: BossData = {
   "鳳凰": { name: "鳳凰", respawnMinutes: 1440, lastKilled: null },
   "摩德烏斯": { name: "摩德烏斯", respawnMinutes: 1440, lastKilled: null },
   "薩拉克斯": { name: "薩拉克斯", respawnMinutes: 1440, lastKilled: null },
+  "霸拉克": { name: "霸拉克", respawnMinutes: 1440, lastKilled: null },
+  "巴倫": { name: "巴倫", respawnMinutes: 1440, lastKilled: null },
+  "黑卡頓": { name: "黑卡頓", respawnMinutes: 1440, lastKilled: null },
+  "拉何": { name: "拉何", respawnMinutes: 1980, lastKilled: null },
 };
