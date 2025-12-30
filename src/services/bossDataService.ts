@@ -1,14 +1,68 @@
 import { BossData, Boss } from '@/types/boss'
 import { supabase, useCloud, BossRecord } from '@/lib/supabase'
 import { defaultBossData } from '@/data/bossData'
+import { RealtimeChannel } from '@supabase/supabase-js'
 
 export class BossDataService {
   private groupName: string
   private tableName = 'boss_tracker_data'
   private syncLock: Promise<boolean> | null = null
+  private realtimeChannel: RealtimeChannel | null = null
 
   constructor(groupName: string) {
     this.groupName = groupName
+  }
+
+  /**
+   * Subscribe to real-time updates from Supabase
+   */
+  subscribeToUpdates(callback: (bossName: string, bossData: Boss) => void): () => void {
+    if (!useCloud || !supabase) {
+      console.log('Real-time sync disabled: Supabase not configured')
+      return () => {}
+    }
+
+    // Clean up existing subscription
+    if (this.realtimeChannel) {
+      this.realtimeChannel.unsubscribe()
+    }
+
+    // Subscribe to changes for this group
+    this.realtimeChannel = supabase
+      .channel(`boss_tracker_${this.groupName}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: this.tableName,
+          filter: `group_name=eq.${this.groupName}`
+        },
+        (payload) => {
+          console.log('Real-time update received:', payload)
+
+          if (payload.new && typeof payload.new === 'object') {
+            const record = payload.new as BossRecord
+            callback(record.boss_name, {
+              name: record.boss_name,
+              respawnMinutes: record.respawn_minutes,
+              lastKilled: record.last_killed
+            })
+          }
+        }
+      )
+      .subscribe()
+
+    console.log(`✅ Subscribed to real-time updates for group: ${this.groupName}`)
+
+    // Return unsubscribe function
+    return () => {
+      if (this.realtimeChannel) {
+        this.realtimeChannel.unsubscribe()
+        this.realtimeChannel = null
+        console.log('Unsubscribed from real-time updates')
+      }
+    }
   }
 
   /**
@@ -89,7 +143,7 @@ export class BossDataService {
   }
 
   /**
-   * Update a specific boss kill time
+   * Update a specific boss kill time (single boss update to prevent race conditions)
    */
   async updateBoss(bossData: BossData, bossName: string, killedTime: string | null): Promise<BossData> {
     const updatedData = {
@@ -100,8 +154,53 @@ export class BossDataService {
       }
     }
 
-    await this.saveData(updatedData)
+    // Save to localStorage immediately
+    this.saveToLocalStorage(updatedData)
+
+    // Sync only this specific boss to cloud to avoid race conditions
+    if (useCloud && supabase) {
+      await this.syncSingleBoss(bossName, updatedData[bossName])
+    }
+
     return updatedData
+  }
+
+  /**
+   * Sync a single boss to cloud (prevents overwriting other bosses' data)
+   */
+  private async syncSingleBoss(bossName: string, bossInfo: Boss): Promise<boolean> {
+    if (!supabase) return false
+
+    try {
+      const now = new Date().toISOString()
+
+      const record: Omit<BossRecord, 'id' | 'created_at'> = {
+        group_name: this.groupName,
+        boss_name: bossName,
+        respawn_minutes: bossInfo.respawnMinutes,
+        last_killed: bossInfo.lastKilled,
+        updated_at: now
+      }
+
+      // Use UPSERT for single boss
+      const { error } = await supabase
+        .from(this.tableName)
+        .upsert([record], {
+          onConflict: 'group_name,boss_name',
+          ignoreDuplicates: false
+        })
+
+      if (error) {
+        console.error('Single boss sync error:', error)
+        throw error
+      }
+
+      console.log(`✅ Synced ${bossName} to cloud`)
+      return true
+    } catch (error) {
+      console.error('Failed to sync single boss:', error)
+      return false
+    }
   }
 
   /**

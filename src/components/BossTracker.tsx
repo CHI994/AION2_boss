@@ -54,7 +54,29 @@ export const BossTracker = ({ groupConfig, onBack }: BossTrackerProps) => {
     };
 
     loadData();
-  }, [groupConfig.filePrefix]);
+
+    // Subscribe to real-time updates
+    const unsubscribe = dataService.subscribeToUpdates((bossName, updatedBoss) => {
+      console.log(`Real-time update for ${bossName}:`, updatedBoss);
+
+      setBossData(prevData => ({
+        ...prevData,
+        [bossName]: updatedBoss
+      }));
+
+      // Show notification for remote updates
+      toast({
+        title: "🔄 即時更新",
+        description: `${bossName} 的資料已從其他設備更新`,
+        variant: "default",
+      });
+    });
+
+    // Cleanup subscription on unmount
+    return () => {
+      unsubscribe();
+    };
+  }, [groupConfig.filePrefix, toast]);
 
   // 儲存數據到雲端/localStorage
   const saveBossData = async (data: BossData) => {
@@ -125,28 +147,37 @@ export const BossTracker = ({ groupConfig, onBack }: BossTrackerProps) => {
   // 記錄現在時間
   const recordCurrentTime = async (bossName: string) => {
     const now = getTaiwanTime().toISOString();
-    const newData = {
-      ...bossData,
-      [bossName]: {
-        ...bossData[bossName],
-        lastKilled: now,
-      },
-    };
-    
-    await saveBossData(newData);
-    setSelectedBoss(null);
-    
-    // 清除該Boss的提醒狀態
-    setWarningsSent(prev => {
-      const newSet = new Set(prev);
-      newSet.delete(bossName);
-      return newSet;
-    });
-    
-    toast({
-      title: "✅ 更新成功",
-      description: `已記錄 ${bossName} 的擊殺時間${useCloud ? '並同步到雲端' : ''}`,
-    });
+
+    try {
+      setIsSyncing(true);
+
+      // Use updateBoss method which only syncs this specific boss
+      const newData = await dataService.updateBoss(bossData, bossName, now);
+      setBossData(newData);
+
+      setSelectedBoss(null);
+
+      // 清除該Boss的提醒狀態
+      setWarningsSent(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(bossName);
+        return newSet;
+      });
+
+      toast({
+        title: "✅ 更新成功",
+        description: `已記錄 ${bossName} 的擊殺時間${useCloud ? '並同步到雲端' : ''}`,
+      });
+    } catch (error) {
+      console.error('更新Boss時間失敗:', error);
+      toast({
+        title: "❌ 更新失敗",
+        description: "更新Boss時間時發生錯誤",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   // 手動輸入時間 - 使用增強的解析功能和週期重新計算
